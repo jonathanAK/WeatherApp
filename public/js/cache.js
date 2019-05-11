@@ -1,21 +1,21 @@
-class Cache{
-    timeOut= 3600000;
-    cacheMem= {};
+class Cache {
+    timeOut = 3600000;
+    cacheMem = {};
 
-    hash = (str) =>{
+    hash = (str) => {
         let hash = '0';
         let i;
         let chr;
         if (str.length === 0) return hash;
         for (i = 0; i < str.length; i++) {
             chr = str.charCodeAt(i);
-            hash = '0' + (chr%8) + hash + chr;
-            hash = (parseInt(hash, 36)%60446175).toString(36);
+            hash = '0' + (chr % 8) + hash + chr;
+            hash = (parseInt(hash, 36) % 60446175).toString(36);
         }
         return hash;
     };
 
-    call = (call) =>{
+    call = (call) => {
         return new Promise((resolve, reject) => {
             let hash = this.hash(call);
             if (this.cacheMem.hasOwnProperty(hash) && (Date.now() - this.timeOut < this.cacheMem[hash].time)) {

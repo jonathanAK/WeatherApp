@@ -45,7 +45,7 @@ function citySelected(city) {
     fetchCity(city);
 }
 
-function setEventListeners(){
+function setEventListeners() {
     views.citiesSelector.addEventListener('change', LocationChange);
     views.graber.addEventListener('mousedown', () => views.graberClicked = true);
     views.body.addEventListener('mouseup', adjustScreen);
