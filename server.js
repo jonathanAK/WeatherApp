@@ -1,10 +1,10 @@
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
-var fetchA = require('node-fetch');
-// const Cache = require('./cache.js');
+'use strict';
+exports.__esModule = true;
+var http = require("http");
+var fs = require("fs");
+var url = require("url");
+var fetch = require('node-fetch');
 var port = 3000;
-// const cache = new Cache;
 var contentTypes = new Map();
 contentTypes.set('html', 'text/html');
 contentTypes.set('htm', 'text/html');
@@ -32,8 +32,8 @@ http.createServer(function (req, res) {
     }
     else {
         var callAddress = q.path.substr(5).toLowerCase();
-        fetchA(callAddress)
-            .then(function (r) { return r.text(); })
+        cache.fetch(callAddress)
+            .then(function (b) { return b.text(); })
             .then(function (body) {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.write(body);
@@ -43,3 +43,36 @@ http.createServer(function (req, res) {
 }).listen(port, function () {
     console.log('Client is available at http://localhost:' + port);
 });
+//cache actions
+var cache = {
+    timeOut: 3600000,
+    cacheMem: {},
+    hash: function (str) {
+        var hash = '0';
+        var i;
+        var chr;
+        if (str.length === 0)
+            return hash;
+        for (i = 0; i < str.length; i++) {
+            chr = str.charCodeAt(i);
+            hash = '0' + (chr % 8) + hash + chr;
+            hash = (parseInt(hash, 36) % 60446175).toString(36);
+        }
+        return hash;
+    },
+    fetch: function (call) {
+        return new Promise(function (resolve, reject) {
+            var hash = cache.hash(call);
+            if (cache.cacheMem.hasOwnProperty(hash) && (Date.now() - cache.timeOut < cache.cacheMem[hash].time)) {
+                resolve(cache.cacheMem[hash].value.clone());
+            }
+            else {
+                resolve(fetch(call)
+                    .then(function (response) {
+                    cache.cacheMem[hash] = { time: Date.now(), value: response };
+                    return (response.clone());
+                }));
+            }
+        });
+    }
+};
