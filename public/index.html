@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Weather Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+    <script src="js/script.js"></script>
+    <script src="js/cache.js"></script>
+</head>
+<body>
+<main>
+    <h1>Weather</h1>
+    <select id="city_list" class="browser-default custom-select"></select>
+    <span id="weather_stats"></span>
+    <img id="weather_icon">
+</main>
+<graber>||</graber>
+<map>
+    <div id="mapid"></div>
+</map>
+
+<script>
+    'use strict';
+    const views = {
+        body: document.querySelector('body'),
+        main: document.querySelector('main'),
+        graber: document.querySelector('graber'),
+        citiesSelector: document.querySelector('#city_list'),
+        weatherStats: document.querySelector('#weather_stats'),
+        weatherIcon: document.querySelector('#weather_icon'),
+        graberClicked: false,
+        currentCity: "Jerusalem",
+        cityList: {
+            'Jerusalem': [31.7791, 35.2266],
+            'Melbourne': [-37.8143, 144.9632],
+            'Chicago': [41.8756, -87.6245],
+            'London': [51.5073, -0.1277],
+            'Los Angeles': [34.0549, -118.2445],
+            'Montreal': [45.4972, -73.6104],
+            'Glasgow': [55.8567, -4.2436],
+            'Tokyo': [35.6828, 139.759],
+            'Puerto Natales': [-51.7263, -72.5063],
+            'Hukuntsi': [-23.9843, 21.757],
+            'Honolulu': [21.3045, -157.8557]
+        },
+        map:L.map('mapid'),
+        redMarker : L.icon({iconUrl: 'img/icon_red.png', iconSize: [20, 38]}),
+        blueMarker : L.icon({iconUrl: 'img/icon_blue.png', iconSize: [20, 38]})
+    };
+
+    init();
+</script>
+</body>
+</html>
